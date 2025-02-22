@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "hotels")
+@Table(name = "hoteles")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,10 +19,17 @@ public class Hotel {
     private Long id;
 
     @Column(unique = true)
-    private String hotelCode;
+    private String codigoHotel;
+    private String nombre;
+    private String lugar;
+    private String tipoHabitacion;
+    private Double precioNoche;
+    private LocalDate disponibleDesde;
+    private LocalDate disponibleHasta;
+    private Boolean reservado;
 
-    private String name;
-    private String place;
+
+
     private boolean deleted; // borrado para lógico
 
 }
