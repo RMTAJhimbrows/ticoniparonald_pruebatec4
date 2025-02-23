@@ -17,9 +17,10 @@ public class HotelController {
     @Autowired
     HotelService service;
 
-    @GetMapping({"/", ""})
+    @GetMapping("/hotels")
     public ResponseEntity<List<HotelDTO>> getAllHotels(){
         List<HotelDTO> list = service.findAll();
         return ResponseEntity.ok(list);
     }
+    
 }
