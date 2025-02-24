@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,14 +18,29 @@ public class HotelService implements IHotelService {
     private final IHotelRepository repository;
     private final ModelMapper modelMapper;
 
+
     @Override
     public List<HotelDTO> findAll() {
-        List<Hotel> hoteles = repository.findAll();
+        List<Hotel> hoteles = repository.findAllByDeletedFalse();
         if (hoteles.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontraron hoteles registrados. ");
+            throw new ResourceNotFoundException("No hay hoteles registrados.");
         }
         return hoteles.stream()
                 .map(hotel -> modelMapper.map(hotel, HotelDTO.class))
                 .toList();
+    }
+
+    @Override
+    public List<HotelDTO> getAvailableRooms(String destination, LocalDate dateFrom, LocalDate dateTo) {
+
+        List<Hotel> listado = repository.findAll();
+
+        return repository.findAll().stream()
+                .filter(hotel -> !hotel.isDeleted())
+                .filter(hotel -> !hotel.getReservado())
+                .filter(hotel -> destination == null || hotel.getLugar().equalsIgnoreCase(destination))
+                .filter(hotel -> dateFrom == null || !hotel.getDisponibleDesde().isBefore(dateFrom))
+                .filter(hotel -> dateTo == null || !hotel.getDisponibleHasta().isAfter(dateTo))
+                .map(hotel -> modelMapper.map(hotel, HotelDTO.class)).toList();
     }
 }
