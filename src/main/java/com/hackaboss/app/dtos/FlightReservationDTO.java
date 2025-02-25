@@ -16,6 +16,6 @@ public class FlightReservationDTO {
     private String flightDate;    // corresponde a fechaVuelo
     private Integer numberOfPeople; // corresponde a cantidadPersonas
     private Double totalAmount;   // corresponde a montoTotal
-    private FlightDTO flight;
+    private VueloDTO flight;
     private List<PassengerDTO> passengers;
 }

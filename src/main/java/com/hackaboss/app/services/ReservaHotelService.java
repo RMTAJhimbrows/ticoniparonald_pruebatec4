@@ -7,7 +7,7 @@ import com.hackaboss.app.entities.Huesped;
 import com.hackaboss.app.entities.ReservaHotel;
 import com.hackaboss.app.exceptions.BusinessException;
 import com.hackaboss.app.repositories.IHotelRepository;
-import com.hackaboss.app.repositories.IHotelReservationRepository;
+import com.hackaboss.app.repositories.IReservaHotelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class HotelReservationService implements IHotelReservationService{
-    private final IHotelReservationRepository reservaRepository;
+public class ReservaHotelService implements IReservaHotelService {
+    private final IReservaHotelRepository reservaRepository;
     private final IHotelRepository hotelRepository;
     private  final DateTimeFormatter DATE_FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
