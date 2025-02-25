@@ -1,9 +1,11 @@
 package com.hackaboss.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "hoteles")
@@ -28,7 +30,9 @@ public class Hotel {
     private LocalDate disponibleHasta;
     private Boolean reservado;
 
-
+    @JsonManagedReference
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ReservaHotel> reservas;
 
     private boolean deleted; // borrado para lógico
 

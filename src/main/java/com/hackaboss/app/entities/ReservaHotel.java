@@ -1,5 +1,6 @@
 package com.hackaboss.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,15 +20,13 @@ public class ReservaHotel {
     private Long id;
 
     private LocalDate fechaEntrada;
-
     private LocalDate fechaSalida;
-
     private Integer cantidadPersonas;
-
     private Double montoTotal;
 
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
     @OneToMany(mappedBy = "reservaHotel", cascade = CascadeType.ALL)
