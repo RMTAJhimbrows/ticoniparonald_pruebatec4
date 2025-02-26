@@ -20,6 +20,8 @@ public class ReservaVuelo {
 
     private LocalDate fechaVuelo;
     private Integer cantidadPersonas;
+    private String origen;
+    private String destino;
     private Double montoTotal;
 
     @ManyToOne

@@ -19,7 +19,7 @@ public class Vuelo {
     private Long id;
 
     @Column(unique = true)
-    private String nroVuelo;
+    private String codigoVuelo;
     private String origen;
     private String destino;
     private String tipoAsiento;
@@ -28,5 +28,4 @@ public class Vuelo {
     private LocalDate fechaVuelta;
 
     private boolean deleted;
-
 }

@@ -1,8 +1,6 @@
 package com.hackaboss.app.controllers;
 
 import com.hackaboss.app.dtos.VueloDTO;
-import com.hackaboss.app.entities.Vuelo;
-import com.hackaboss.app.exceptions.ResourceNotFoundException;
 import com.hackaboss.app.services.IVueloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

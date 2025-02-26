@@ -43,7 +43,7 @@ public class ReservaHotelService implements IReservaHotelService {
         }
 
         Hotel hotel = hotelRepository.findByCodigoHotel(reservaHotelDTO.getCodigoHotel())
-                .orElseThrow(() -> new RuntimeException("hotel no encontrado: " + reservaHotelDTO.getCodigoHotel()));
+                .orElseThrow(() -> new BusinessException("hotel no encontrado: " + reservaHotelDTO.getCodigoHotel()));
 
         if (hotel.getReservado()){
             throw new BusinessException("El hotel y las habitaciones están reservadas. Por favor elija otra. ");

@@ -1,9 +1,7 @@
 package com.hackaboss.app.controllers;
 
 import com.hackaboss.app.dtos.HotelDTO;
-import com.hackaboss.app.exceptions.BusinessException;
 import com.hackaboss.app.services.HotelService;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController

@@ -34,6 +34,6 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ReservaHotel> reservas;
 
-    private boolean deleted; // borrado para lógico
+    private boolean deleted;
 
 }

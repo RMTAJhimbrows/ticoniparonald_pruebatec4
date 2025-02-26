@@ -10,10 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GuestDTO {
+public class PasajeroDTO {
+
     private Long id;
-    @JsonProperty("firstName")
+
+    @JsonProperty("name")
     private String nombre;
-    @JsonProperty("lastName")
+
+    @JsonProperty("lastname")
     private String apellido;
 }

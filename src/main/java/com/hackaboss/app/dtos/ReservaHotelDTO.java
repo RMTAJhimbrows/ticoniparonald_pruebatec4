@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -34,5 +33,5 @@ public class ReservaHotelDTO {
     private String codigoHotel;
 
     @JsonProperty("guests")
-    private List<GuestDTO> huespedesDTO;
+    private List<HuespedDTO> huespedesDTO;
 }

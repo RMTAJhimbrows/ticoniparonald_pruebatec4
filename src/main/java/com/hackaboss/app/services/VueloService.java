@@ -1,9 +1,7 @@
 package com.hackaboss.app.services;
 
 import com.hackaboss.app.dtos.VueloDTO;
-import com.hackaboss.app.entities.Vuelo;
 import com.hackaboss.app.exceptions.BusinessException;
-import com.hackaboss.app.exceptions.ResourceNotFoundException;
 import com.hackaboss.app.repositories.IVueloRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -48,6 +46,4 @@ public class VueloService implements IVueloService {
                 .map(vuelo -> modelMapper.map(vuelo, VueloDTO.class))
                 .toList();
     }
-
-
 }
