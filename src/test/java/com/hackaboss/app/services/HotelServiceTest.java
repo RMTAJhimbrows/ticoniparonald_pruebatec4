@@ -43,7 +43,7 @@ public class HotelServiceTest {
 
     @Test
     @DisplayName("Se envía solicitud de listado de todos los hoteles registrados - 1")
-    void testFindAllConHotelesExistentes() {
+    void testObtenerHotelesConHotelesExistentes() {
 
         Hotel hotelRadison = new Hotel(
         1L, "XX-00034", "Hotel Radisson", "La Paz", "Doble", 650.00,
@@ -85,7 +85,7 @@ public class HotelServiceTest {
 
         when(repository.findAllByDeletedFalse()).thenReturn(hoteles);
 
-        List<HotelDTO> resultado = service.findAll();
+        List<HotelDTO> resultado = service.obtenerHoteles();
 
         assertThat(resultado).hasSize(2);
 
@@ -95,9 +95,9 @@ public class HotelServiceTest {
 
     @Test
     @DisplayName("Se envía solicitud de listado de todos los hoteles registrados - 2")
-    void testFindAllSinHoteles() {
+    void testObtenerHotelesSinHoteles() {
         when(repository.findAllByDeletedFalse()).thenReturn(List.of());
-        assertThatThrownBy(() -> service.findAll())
+        assertThatThrownBy(() -> service.obtenerHoteles())
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("No hay hoteles registrados.");
     }

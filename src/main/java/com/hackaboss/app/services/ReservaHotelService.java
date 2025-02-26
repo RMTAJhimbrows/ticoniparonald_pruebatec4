@@ -90,7 +90,7 @@ public class ReservaHotelService implements IReservaHotelService {
         try {
             return LocalDate.parse(fechaStr, DATE_FORMATO);
         } catch (Exception e) {
-          throw new BusinessException("Formato de fecha inválido. Use yyyy-MM-dd.");
+          throw new BusinessException("Formato de fecha inválido. Utilice el siguiente formato dd/MM/yyyy.");
         }
     }
 

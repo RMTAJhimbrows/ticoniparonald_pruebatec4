@@ -20,7 +20,7 @@ public class HotelService implements IHotelService {
 
 
     @Override
-    public List<HotelDTO> findAll() {
+    public List<HotelDTO> obtenerHoteles() {
         List<Hotel> hoteles = repository.findAllByDeletedFalse();
         if (hoteles.isEmpty()) {
             throw new ResourceNotFoundException("No hay hoteles registrados.");

@@ -22,7 +22,7 @@ public class HotelController {
 
     @GetMapping("/hotels")
     public ResponseEntity<List<HotelDTO>> getAllHotels(){
-        List<HotelDTO> list = service.findAll();
+        List<HotelDTO> list = service.obtenerHoteles();
         return ResponseEntity.ok(list);
     }
 

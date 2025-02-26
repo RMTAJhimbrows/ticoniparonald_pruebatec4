@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IHotelService {
-    List<HotelDTO> findAll();
+    List<HotelDTO> obtenerHoteles();
 
     List<HotelDTO> getAvailableRooms(String destination, LocalDate dateFrom, LocalDate dateTo);
 

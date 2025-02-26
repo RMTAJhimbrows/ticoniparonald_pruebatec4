@@ -16,7 +16,7 @@ public class VueloDTO {
     private Long id;
 
     @JsonProperty("flightNumber")
-    private String nroVuelo;
+    private String codigoVuelo;
 
     @JsonProperty("origin")
     private String origen;
