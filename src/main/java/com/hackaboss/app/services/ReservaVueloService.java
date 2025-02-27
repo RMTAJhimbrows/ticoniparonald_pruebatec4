@@ -23,6 +23,12 @@ public class ReservaVueloService implements IReservaVueloService{
     private final IVueloRepository vueloRepository;
     private  final DateTimeFormatter DATE_FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+    /**
+     * Obtiene el precio total de una reserva de vuelo y guarda la reserva en la base de datos.
+     *
+     * @param reservaVueloDTO Datos de la reserva incluyendo código de vuelo, pasajeros y fechas.
+     * @return TotalMountDTO con el monto total calculado.
+     */
     @Override
     public TotalMountDTO obtenerPrecioTotal(ReservaVueloDTO reservaVueloDTO) {
 
@@ -57,11 +63,26 @@ public class ReservaVueloService implements IReservaVueloService{
         return new TotalMountDTO(precioTotal);
     }
 
+    /**
+     * Calcula el precio total de la reserva de vuelo.
+     *
+     * @param dto   Datos de la reserva.
+     * @param vuelo Datos del vuelo reservado.
+     * @return El monto total a pagar.
+     */
     @Override
     public Double calcularPrecioTotal(ReservaVueloDTO dto, Vuelo vuelo) {
         return dto.getCantidadPersonas() * vuelo.getPrecioPorPersona();
     }
 
+
+    /**
+     * Convierte un DTO de reserva de vuelo en una entidad ReservaVuelo.
+     *
+     * @param dto   DTO con los datos de la reserva.
+     * @param vuelo Entidad de vuelo asociada a la reserva.
+     * @return Objeto ReservaVuelo listo para ser persistido.
+     */
     @Override
     public ReservaVuelo convertToEntity(ReservaVueloDTO dto, Vuelo vuelo) {
         LocalDate fecha;
@@ -83,6 +104,13 @@ public class ReservaVueloService implements IReservaVueloService{
         return reserva;
     }
 
+    /**
+     * Mapea los pasajeros del DTO a entidades Pasajero asociadas a la reserva.
+     *
+     * @param dto     DTO de la reserva con la lista de pasajeros.
+     * @param reserva ReservaVuelo a la que pertenecen los pasajeros.
+     * @return Lista de entidades Pasajero.
+     */
     private List<Pasajero> mapearPasajeros(ReservaVueloDTO dto, ReservaVuelo reserva) {
         if (dto.getPasajeros() == null) return List.of();
         return dto.getPasajeros().stream()

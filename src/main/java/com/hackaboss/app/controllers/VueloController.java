@@ -18,7 +18,7 @@ public class VueloController {
     @Autowired
     IVueloService service;
 
-    @GetMapping({"/", ""})
+    @GetMapping
     public ResponseEntity<Map<String, List<VueloDTO>>> filtrarVuelo(
             @RequestParam (required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateFrom,
             @RequestParam (required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateTo,

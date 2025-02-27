@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface IHotelService {
     List<HotelDTO> obtenerHoteles();
-    List<HotelDTO> getAvailableRooms(String destination, LocalDate dateFrom, LocalDate dateTo);
 
     HotelDTO guardarHotel(HotelDTO dto);
     HotelDTO actualizarHotel(Long id, HotelDTO dto);

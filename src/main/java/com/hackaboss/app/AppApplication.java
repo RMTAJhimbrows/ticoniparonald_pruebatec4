@@ -16,9 +16,11 @@ public class AppApplication {
 	@Bean
 	public OpenAPI customOpenAPI(){
 		return new OpenAPI().info(new Info()
-				.title("API de Personas")
+				.title("API de Agencia de vuelos y Hoteles")
 				.version("0.0.1")
-				.description("Una descripción corta de lo que hace tu sistema"));
+				.description("La app tiene la funcionalidades de reserva un Hotel en un fecha determinada con un destino, ademas de poder autenticarse a ciertas peticiones como las  cuatro operaciones CRUD." +
+						" También tiene la funcionalidad de reservar un vuelo al igual que hotel también podemos realizar las operaciones CRUD."));
+
 	}
 
 }

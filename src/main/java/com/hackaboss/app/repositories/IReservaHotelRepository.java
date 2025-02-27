@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IReservaHotelRepository extends JpaRepository<ReservaHotel, Long> {
-    Optional<ReservaHotel> findByHotel_CodigoHotel(String codigoHotel);
 
 }

@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,12 @@ public class HotelService implements IHotelService {
     private final ModelMapper modelMapper;
 
 
+    /**
+     * Obtiene una lista de todos los hoteles que no han sido eliminados.
+     *
+     * @return List<HotelDTO> Lista de hoteles disponibles, convertidos a DTO.
+     * @throws ResourceNotFoundException Si no se encuentran hoteles registrados.
+     */
     @Override
     public List<HotelDTO> obtenerHoteles() {
         List<Hotel> hoteles = repository.findAllByDeletedFalse();
@@ -33,20 +38,13 @@ public class HotelService implements IHotelService {
                 .toList();
     }
 
-    @Override
-    public List<HotelDTO> getAvailableRooms(String destination, LocalDate dateFrom, LocalDate dateTo) {
-
-        List<Hotel> listado = repository.findAll();
-
-        return repository.findAll().stream()
-                .filter(hotel -> !hotel.isDeleted())
-                .filter(hotel -> !hotel.getReservado())
-                .filter(hotel -> destination == null || hotel.getLugar().equalsIgnoreCase(destination))
-                .filter(hotel -> dateFrom == null || !hotel.getDisponibleDesde().isBefore(dateFrom))
-                .filter(hotel -> dateTo == null || !hotel.getDisponibleHasta().isAfter(dateTo))
-                .map(hotel -> modelMapper.map(hotel, HotelDTO.class)).toList();
-    }
-
+    /**
+     * Guarda un nuevo hotel en el sistema. Si el código de hotel ya existe, se lanzará una excepción.
+     *
+     * @param dto Datos del nuevo hotel que se desea guardar.
+     * @return HotelDTO El hotel guardado, convertido a DTO.
+     * @throws BusinessException Si el código de hotel ya existe o si las fechas no son válidas.
+     */
     @Override
     public HotelDTO guardarHotel(HotelDTO dto) {
         Optional<Hotel> hotelExistente = repository.findByCodigoHotel(dto.getCodigoHotel());
@@ -65,6 +63,14 @@ public class HotelService implements IHotelService {
         return modelMapper.map(hotelGuardado, HotelDTO.class);
     }
 
+    /**
+     * Actualiza la información de un hotel existente. Si el hotel está eliminado, se lanzará una excepción.
+     *
+     * @param id Identificador del hotel a actualizar.
+     * @param dto Nuevos datos del hotel.
+     * @return HotelDTO El hotel actualizado, convertido a DTO.
+     * @throws BusinessException Si el hotel no se encuentra o si las fechas no son válidas.
+     */
     @Override
     public HotelDTO actualizarHotel(Long id, HotelDTO dto) {
 
@@ -84,6 +90,13 @@ public class HotelService implements IHotelService {
         return modelMapper.map(hotelGuardado, HotelDTO.class);
     }
 
+    /**
+     * Busca un hotel por su ID. Si el hotel no existe o está eliminado, se lanzará una excepción.
+     *
+     * @param id Identificador del hotel a buscar.
+     * @return HotelDTO El hotel encontrado, convertido a DTO.
+     * @throws BusinessException Si el ID es inválido o si el hotel no se encuentra o está eliminado.
+     */
     @Override
     public HotelDTO buscarHotelPorID(Long id) {
         if (id <= 0) {
@@ -96,6 +109,13 @@ public class HotelService implements IHotelService {
         return modelMapper.map(hotelBuscado, HotelDTO.class);
     }
 
+    /**
+     * Elimina un hotel (cambiando su estado a eliminado). Devuelve la lista de hoteles no eliminados.
+     *
+     * @param id Identificador del hotel a eliminar.
+     * @return List<HotelDTO> Lista de hoteles no eliminados, convertidos a DTO.
+     * @throws BusinessException Si el ID es inválido o si el hotel no se encuentra o ya está eliminado.
+     */
     @Override
     public List<HotelDTO> eliminarHotel(Long id) {
         if (id <= 0) {
@@ -116,6 +136,12 @@ public class HotelService implements IHotelService {
     }
 
     // Métodos auxiliares
+    /**
+     * Actualiza los atributos de un hotel con los datos proporcionados en el DTO.
+     *
+     * @param hotel El hotel que se va a actualizar.
+     * @param dto El DTO con los nuevos datos del hotel.
+     */
     private void actualizarHotelDesdeDTO(Hotel hotel, HotelDTO dto) {
         hotel.setCodigoHotel(dto.getCodigoHotel());
         hotel.setNombre(dto.getNombre());
@@ -126,6 +152,14 @@ public class HotelService implements IHotelService {
         hotel.setDisponibleHasta(dto.getDisponibleHasta());
         hotel.setReservado(dto.getReservado());
     }
+
+    /**
+     * Valida las fechas de disponibilidad del hotel.
+     *
+     * @param fechaDesde Fecha de inicio de la disponibilidad.
+     * @param fechaHasta Fecha de fin de la disponibilidad.
+     * @throws BusinessException Si alguna de las fechas no es válida.
+     */
     private void validarFecha(LocalDate fechaDesde, LocalDate fechaHasta) {
         if (fechaDesde.isBefore(LocalDate.now())) {
             throw new BusinessException("La fecha Ida no puede ser anterior a la fecha actual.");
@@ -137,6 +171,13 @@ public class HotelService implements IHotelService {
             throw new BusinessException("La fecha de Hasta no puede ser anterior a la fecha actual. ");
         }
     }
+
+    /**
+     * Crea un objeto Hotel a partir de un DTO.
+     *
+     * @param dto El DTO con los datos del hotel.
+     * @return Hotel El objeto Hotel creado.
+     */
     private Hotel crearHotelDesdeDTO(HotelDTO dto) {
         Hotel hotel = new Hotel();
         hotel.setCodigoHotel(dto.getCodigoHotel());
