@@ -17,13 +17,12 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/v3/api-docs/**", "/doc/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-doc/**", "/doc/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         // Endpoints Públicos (No requieren autenticación)
                         .requestMatchers(HttpMethod.GET, "/agency/hotels").permitAll()
                         .requestMatchers(HttpMethod.GET, "/agency/rooms").permitAll()
                         .requestMatchers(HttpMethod.POST, "/agency/room-booking/new").permitAll()
                         .requestMatchers(HttpMethod.GET, "/agency/flights").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/agency/flights/search").permitAll()
                         .requestMatchers(HttpMethod.POST, "/agency/flight-booking/new").permitAll()
 
                         // Endpoints privados (Sí requieren autenticación)

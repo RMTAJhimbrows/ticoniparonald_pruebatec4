@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/agency")
+@RequestMapping("/agency/flights")
 public class VueloController {
 
     @Autowired
     IVueloService service;
 
-    @GetMapping("/flights")
+    @GetMapping({"/", ""})
     public ResponseEntity<Map<String, List<VueloDTO>>> filtrarVuelo(
             @RequestParam (required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateFrom,
             @RequestParam (required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dateTo,
@@ -29,23 +29,23 @@ public class VueloController {
         return ResponseEntity.ok(vuelos);
     }
 
-    @PostMapping("/flights/new")
+    @PostMapping("/new")
     public ResponseEntity<VueloDTO> crearVuelo(@RequestBody VueloDTO dto){
         return ResponseEntity.ok(service.guardarVuelo(dto));
     }
 
-    @PutMapping("/flights/edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<VueloDTO> actualizarVuelo(@PathVariable Long id, @RequestBody VueloDTO vueloDTO){
         return ResponseEntity.ok(service.actualizarVuelo(id, vueloDTO));
     }
 
-    @DeleteMapping("/flights/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<List<VueloDTO>> eliminarVuelo(@PathVariable Long id){
         List<VueloDTO> listado = service.eliminar(id);
         return ResponseEntity.ok(listado);
     }
 
-    @GetMapping("/flights/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VueloDTO> buscarVueloPorId(@PathVariable Long id){
         return ResponseEntity.ok(service.buscarVueloPorId(id));
     }

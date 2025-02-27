@@ -17,10 +17,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class VueloService implements IVueloService {
+
     private final IVueloRepository repository;
     private final ModelMapper modelMapper;
     private final DateTimeFormatter DATE_FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
 
     @Override
     public Map<String, List<VueloDTO>> obtenerVuelosFiltrados(LocalDate fechaIda, LocalDate fechaVuelta, String origen, String destino) {
@@ -50,24 +50,9 @@ public class VueloService implements IVueloService {
 
         LocalDate fechaIda = parseFecha(dto.getFechaIda());
         LocalDate fechaVuelta = parseFecha(dto.getFechaVuelta());
-        if (fechaIda.isBefore(LocalDate.now())) {
-            throw new BusinessException("La fecha Ida no puede ser anterior a la fecha actual.");
-        }
-        if (fechaVuelta.isBefore(fechaIda)) {
-            throw new BusinessException("La fecha de Vuelta no puede ser anterior a la fecha de ida.");
-        }
-        if (fechaVuelta.isBefore(LocalDate.now())) {
-            throw new BusinessException("La fecha de vuelta no puede ser anterior a la fecha actual. ");
-        }
+        validarFecha(fechaIda, fechaVuelta);
 
-        Vuelo nuevoVuelo = new Vuelo();
-        nuevoVuelo.setCodigoVuelo(dto.getCodigoVuelo());
-        nuevoVuelo.setOrigen(dto.getOrigen());
-        nuevoVuelo.setDestino(dto.getDestino());
-        nuevoVuelo.setTipoAsiento(dto.getTipoAsiento());
-        nuevoVuelo.setPrecioPorPersona(dto.getPrecioPorPersona());
-        nuevoVuelo.setFechaIda(fechaIda);
-        nuevoVuelo.setFechaVuelta(fechaVuelta);
+        Vuelo nuevoVuelo =crearVueloDesdeDTO(dto, fechaIda, fechaVuelta);
 
         Vuelo vueloGuardado = repository.save(nuevoVuelo);
 
@@ -81,40 +66,15 @@ public class VueloService implements IVueloService {
         if (vueloEncontrado.isDeleted()) {
             throw new BusinessException("Vuelo con ID ha sido eliminado. " + id);
         }
+
         LocalDate fechaIda = parseFecha(dto.getFechaIda());
         LocalDate fechaVuelta = parseFecha(dto.getFechaVuelta());
-        if (fechaIda.isBefore(LocalDate.now())) {
-            throw new BusinessException("La fecha Ida no puede ser anterior a la fecha actual.");
-        }
-        if (fechaVuelta.isBefore(fechaIda)) {
-            throw new BusinessException("La fecha de Vuelta no puede ser anterior a la fecha de ida.");
-        }
-        if (fechaVuelta.isBefore(LocalDate.now())) {
-            throw new BusinessException("La fecha de vuelta no puede ser anterior a la fecha actual. ");
-        }
+        validarFecha(fechaIda, fechaVuelta);
 
-        vueloEncontrado.setCodigoVuelo(dto.getCodigoVuelo());
-        vueloEncontrado.setOrigen(dto.getOrigen());
-        vueloEncontrado.setDestino(dto.getDestino());
-        vueloEncontrado.setTipoAsiento(dto.getTipoAsiento());
-        vueloEncontrado.setPrecioPorPersona(dto.getPrecioPorPersona());
-        vueloEncontrado.setFechaIda(fechaIda);
-        vueloEncontrado.setFechaVuelta(fechaVuelta);
-
+        actualizarVueloDesdeDTO(vueloEncontrado, dto, fechaIda, fechaVuelta);
         Vuelo vueloGuardado = repository.save(vueloEncontrado);
 
         return modelMapper.map(vueloGuardado, VueloDTO.class);
-    }
-
-    private LocalDate parseFecha(String fechaStr) {
-        if (fechaStr == null || fechaStr.isEmpty()){
-            throw new BusinessException("La fecha no puede ser nula o vacía");
-        }
-        try {
-            return LocalDate.parse(fechaStr);
-        } catch (Exception e) {
-            throw new BusinessException("Formato de fecha inválido. Utilice el siguiente formato dd/MM/yyyy.");
-        }
     }
 
     @Override
@@ -150,7 +110,9 @@ public class VueloService implements IVueloService {
         return modelMapper.map(vueloBuscado, VueloDTO.class);
     }
 
+    // Métodos Auxiliares
     private List<VueloDTO> filtrarVuelos(LocalDate fechaIda, LocalDate fechaVuelta, String origen, String destino) {
+
         return repository.findAll().stream()
                 .filter(vuelo -> !vuelo.isDeleted())
                 .filter(vuelo -> fechaIda == null || !vuelo.getFechaIda().isBefore(fechaIda))
@@ -159,5 +121,47 @@ public class VueloService implements IVueloService {
                 .filter(vuelo -> destino == null || vuelo.getDestino().equalsIgnoreCase(destino))
                 .map(vuelo -> modelMapper.map(vuelo, VueloDTO.class))
                 .toList();
+    }
+    private Vuelo crearVueloDesdeDTO(VueloDTO dto, LocalDate fechaIda, LocalDate fechaVuelta) {
+
+        Vuelo vuelo = new Vuelo();
+        vuelo.setCodigoVuelo(dto.getCodigoVuelo());
+        vuelo.setOrigen(dto.getOrigen());
+        vuelo.setDestino(dto.getDestino());
+        vuelo.setTipoAsiento(dto.getTipoAsiento());
+        vuelo.setPrecioPorPersona(dto.getPrecioPorPersona());
+        vuelo.setFechaIda(fechaIda);
+        vuelo.setFechaVuelta(fechaVuelta);
+        return vuelo;
+    }
+    private void actualizarVueloDesdeDTO(Vuelo vuelo, VueloDTO dto, LocalDate fechaIda, LocalDate fechaVuelta) {
+        vuelo.setCodigoVuelo(dto.getCodigoVuelo());
+        vuelo.setOrigen(dto.getOrigen());
+        vuelo.setDestino(dto.getDestino());
+        vuelo.setTipoAsiento(dto.getTipoAsiento());
+        vuelo.setPrecioPorPersona(dto.getPrecioPorPersona());
+        vuelo.setFechaIda(fechaIda);
+        vuelo.setFechaVuelta(fechaVuelta);
+    }
+    private LocalDate parseFecha(String fechaStr) {
+        if (fechaStr == null || fechaStr.isEmpty()){
+            throw new BusinessException("La fecha no puede ser nula o vacía");
+        }
+        try {
+            return LocalDate.parse(fechaStr);
+        } catch (Exception e) {
+            throw new BusinessException("Formato de fecha inválido. Utilice el siguiente formato dd/MM/yyyy.");
+        }
+    }
+    private void validarFecha(LocalDate fechaIda, LocalDate fechaVuelta) {
+        if (fechaIda.isBefore(LocalDate.now())) {
+            throw new BusinessException("La fecha Ida no puede ser anterior a la fecha actual.");
+        }
+        if (fechaVuelta.isBefore(fechaIda)) {
+            throw new BusinessException("La fecha de Vuelta no puede ser anterior a la fecha de ida.");
+        }
+        if (fechaVuelta.isBefore(LocalDate.now())) {
+            throw new BusinessException("La fecha de vuelta no puede ser anterior a la fecha actual. ");
+        }
     }
 }
